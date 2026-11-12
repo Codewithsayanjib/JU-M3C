@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ju_m3c"
+version = "0.1.0"
+description = "JU-M3C: a large-scale, leakage-audited multimodal multi-layer network corpus of medical cases, with a reusable cross-dataset leakage audit."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Sayanjib Sur" },
+  { name = "Pawan Kumar Singh" },
+]
+keywords = ["data leakage", "benchmark contamination", "clinical case reports", "multilayer network", "small language models"]
+dependencies = [
+  "numpy",
+  "scikit-learn",
+]
+
+[project.optional-dependencies]
+benchmark = ["mlx-lm", "mlx-vlm", "pyyaml", "rouge-score", "bert-score", "nltk", "sentence-transformers", "transformers", "torch"]
+clip = ["open-clip-torch", "timm", "torchvision"]
+dev = ["pytest"]
+
+[project.scripts]
+jumc = "ju_m3c.audit.cli:entrypoint"
+
+[project.urls]
+Repository = "https://github.com/Codewithsayanjib/JU-M3C"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ju_m3c = ["py.typed"]

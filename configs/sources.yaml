@@ -1,0 +1,98 @@
+# Source registry for the clinical-note corpus (English, public data only).
+# Verified 2026-10-01: all sources are public, ungated and need no data-use agreement.
+# Excluded by design: MIMIC, n2c2/i2b2 (credentialed), Asclepius (synthetic), non-English files, images.
+# Raw downloads live in: $CORPUS_ROOT/raw/{key}/  (default corpus)
+
+sources:
+  pmc_patients:
+    name: PMC-Patients
+    kind: huggingface
+    repo: zhengyun21/PMC-Patients
+    revision: 28d8836518
+    files: [PMC-Patients-V2.json, README.md]
+    licence: CC BY-NC-SA 4.0
+    native_labels: [patient-article relevance, patient-patient similarity, age, gender, PMID/PMCID]
+    doc_kind: case report (patient summary)
+    citation: Zhao et al., Scientific Data 2023
+
+  multicare:
+    name: MultiCaRe (text + metadata only; image archives skipped)
+    kind: zenodo
+    record: 20416562          # version 3.0.1 (2026-05-27) of concept 10.5281/zenodo.10079370
+    files: [cases.parquet, metadata.parquet, abstracts.parquet, data_dictionary.csv]
+    licence: CC BY 4.0 on the v1 Zenodo record; per-article licences vary (CC BY / CC BY-NC / CC0), dataset paper states CC BY-NC-SA overall. Treat as CC BY-NC-SA.
+    native_labels: [article metadata (title, journal, keywords, MeSH), abstract, age, gender]
+    doc_kind: case report
+    citation: Nievas Offidani & Delrieux, Data in Brief 2024
+
+  medcasereasoning:
+    name: MedCaseReasoning
+    kind: huggingface
+    repo: zou-lab/MedCaseReasoning
+    revision: 469a5365bc
+    files: null               # whole repo (small)
+    licence: MIT (Hugging Face dataset card); derived from PMC Open Access articles
+    native_labels: [final diagnosis, diagnostic reasoning, PMCID]
+    doc_kind: case report (case presentation)
+    citation: Wu et al., 2025 (arXiv 2505.11733)
+
+  multiclinsum:
+    name: MultiClinSum (English files only)
+    kind: zenodo
+    record: 15546018
+    files: [multiclinsum_gs_train_en.zip, multiclinsum_large-scale_train_en.zip, multiclinsum_test_en.zip]
+    licence: CC BY 4.0
+    native_labels: [case report -> summary pairs]
+    doc_kind: case report
+    citation: BioASQ 2025 MultiClinSum overview (CEUR-WS Vol-4038)
+
+  cupcase:
+    name: CUPCase
+    kind: huggingface
+    repo: ofir408/CupCase
+    revision: 157a85b1a0
+    files: null
+    licence: Apache 2.0
+    native_labels: [final diagnosis (open-ended + multiple choice)]
+    doc_kind: case report
+    citation: Perets et al., AAAI 2025
+
+  casereportbench:
+    name: CaseReportBench
+    kind: huggingface
+    repo: cxyzhang/caseReportBench_ClinicalDenseExtraction_Benchmark
+    revision: 3297c5b2db
+    files: null
+    licence: CC BY 4.0
+    native_labels: [expert dense extraction, 14 categories (138 reports)]
+    doc_kind: case report
+    citation: Zhang et al., CHIL 2025
+
+  mts_dialog:
+    name: MTS-Dialog
+    kind: github
+    repo: abachaa/MTS-Dialog
+    revision: 3ff0801933608d6f570468c13125125fb5cabdea
+    licence: CC BY 4.0
+    native_labels: [dialogue -> note section summary, section header]
+    doc_kind: dialogue + note section
+    citation: Ben Abacha et al., EACL 2023
+
+  aci_bench:
+    name: ACI-Bench
+    kind: github
+    repo: wyim/aci-bench
+    revision: b909b2bb9cf1d19de08df15cddde7bd0179665e4
+    licence: CC BY 4.0
+    native_labels: [dialogue -> full clinical note]
+    doc_kind: dialogue + note
+    citation: Yim et al., Scientific Data 2023
+
+  mtsamples:
+    name: MTSamples (de-duplicated project copy)
+    kind: local
+    path: data/notes.jsonl    # 2,316 unique notes built by prepare_data.py (seed 42)
+    licence: CC0 on Kaggle (tboyle10/medicaltranscriptions); scraped from mtsamples.com
+    native_labels: [specialty, document type, description, keywords]
+    doc_kind: transcribed clinical note
+    citation: mtsamples.com

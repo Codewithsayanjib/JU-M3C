@@ -1,0 +1,254 @@
+# Model registry for zero-shot benchmark.
+# Investigated 2026-09-28 via HF API + chat_template inspection. NO weights downloaded yet.
+# Pinned env: mlx==0.32.2, mlx-lm==0.31.3, mlx-vlm==0.7.3, transformers==5.17.0
+# "revision" = HF commit sha at investigation time; pin it when downloading.
+# All MLX repos: 4-bit affine, group_size 64 (from config.json "quantization").
+
+models:
+  qwen35_4b:
+    name: Qwen3.5-4B (instruct)
+    official_repo: Qwen/Qwen3.5-4B
+    official_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+    mlx_repo: mlx-community/Qwen3.5-4B-MLX-4bit
+    mlx_revision: 32f3e8ecf65426fc3306969496342d504bfa13f3
+    # Alternative with identical quant config: mlx-community/Qwen3.5-4B-4bit (no model card / base_model).
+    architecture: Qwen3_5ForConditionalGeneration (model_type qwen3_5; has vision tower)
+    backend: mlx-lm   # VERIFIED 2026-09-28: loads text-only via mlx_lm qwen3_5.py; peak 3.7 GB; no think text with enable_thinking=False.
+    gated: false
+    system_role: true   # native <|im_start|>system
+    thinking:
+      has_mode: true
+      default: "ON"     # template emits '<think>\n' unless enable_thinking is false
+      disable: "apply_chat_template(..., enable_thinking=False)  -> template inserts empty '<think>\\n\\n</think>\\n\\n'"
+    notes: Still strip any <think>...</think> defensively.
+
+  gemma4_e4b:
+    name: Gemma 4 E4B (instruction-tuned)
+    official_repo: google/gemma-4-E4B-it
+    official_revision: ee0ef6023621cff504d758262d4e04895a5af4a2
+    mlx_repo: mlx-community/gemma-4-e4b-it-4bit
+    mlx_revision: 475b9088d29754a3379866cf5aeb6b41acd313c2
+    # Do NOT use: gemma-4-E4B-it-qat-4bit (different QAT weights), *-OBLITERATED* (abliterated).
+    architecture: Gemma4ForConditionalGeneration (model_type gemma4; vision + audio towers)
+    backend: mlx-lm   # VERIFIED 2026-09-29: loads text-only via mlx_lm gemma4.py; peak 4.9 GB; no <|think|>/<|channel> in prompt or outputs.
+    gated: false      # base google repo not gated at time of check
+    system_role: true   # native '<|turn>system' block
+    thinking:
+      has_mode: true
+      default: "OFF"    # '<|think|>' token only injected when enable_thinking is truthy
+      disable: "omit enable_thinking or pass enable_thinking=False (explicit, for clarity)"
+    notes: Thought output uses '<|channel>...<channel|>' markers, not <think>; strip those too if they appear.
+
+  phi4_mini:
+    name: Phi-4-mini-instruct
+    official_repo: microsoft/Phi-4-mini-instruct
+    official_revision: cfbefacb99257ffa30c83adab238a50856ac3083
+    mlx_repo: mlx-community/Phi-4-mini-instruct-4bit
+    mlx_revision: ac1c269cb4222a4e136a3d09edad301056c1f36a
+    architecture: Phi3ForCausalLM (model_type phi3; text-only)
+    backend: mlx-lm
+    gated: false
+    system_role: true   # '<|system|>...<|end|>' (official template, carried in tokenizer_config.json)
+    thinking:
+      has_mode: false
+      disable: n/a
+    notes: Use the tokenizer's chat_template as-is.
+
+  medgemma15_4b:
+    name: MedGemma 1.5 4B (instruction-tuned)
+    official_repo: google/medgemma-1.5-4b-it
+    official_revision: 91850547d9f0b2fdd21aa7c5f4f3d1a8a52c243b
+    mlx_repo: mlx-community/medgemma-1.5-4b-it-4bit
+    mlx_revision: 762746b7a72b0b68dd8fa3f9aea5dc3980674d23
+    architecture: Gemma3ForConditionalGeneration (model_type gemma3; has vision tower)
+    backend: mlx-lm   # VERIFIED 2026-09-29: loads text-only via mlx_lm gemma3.py; peak 3.5 GB; system text prepended to user turn.
+    gated: true       # official repo gated ("auto"). The MLX mirror is NOT gated on HF, but it carries the
+                      # Health AI Developer Foundations license -> user must still accept terms on the official repo.
+    system_role: false  # template has no system turn: it prepends system content to the first user turn
+                        # (same thing our pipeline does). Passing a system message is safe.
+    thinking:
+      has_mode: false   # nothing in chat template. Model card is gated, so not confirmed from the card.
+      disable: n/a
+    notes: MLX mirror README says converted with mlx-vlm 0.3.9 from google/medgemma-1.5-4b-it.
+
+
+  # ---- Added 2026-10-01 for the Paper 1 benchmark (1-5B models; investigated, not yet downloaded) ----
+
+  qwen35_2b:
+    name: Qwen3.5-2B (instruct)
+    official_repo: Qwen/Qwen3.5-2B
+    mlx_repo: mlx-community/Qwen3.5-2B-MLX-4bit
+    mlx_revision: 93760be4f1f69842a46bc13dbdc0f19e291392a3
+    architecture: Qwen3_5ForConditionalGeneration (model_type qwen3_5)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: apache-2.0
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: true
+      default: "ON"
+      disable: "apply_chat_template(..., enable_thinking=False)"
+    notes: "Same family and template as qwen35_4b. Multimodal checkpoint, loaded text-only."
+
+  gemma4_e2b:
+    name: Gemma 4 E2B (instruction-tuned)
+    official_repo: google/gemma-4-E2B-it
+    mlx_repo: mlx-community/gemma-4-e2b-it-4bit
+    mlx_revision: 238767527555cb75a05732a84dff5d6ba0dd6809
+    architecture: Gemma4ForConditionalGeneration (model_type gemma4)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: gemma
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: true
+      default: "OFF"
+      disable: "pass enable_thinking=False explicitly"
+    notes: "Same template as gemma4_e4b; reasoning uses <|channel> markers. 'Effective' 2B: verify total text parameters."
+
+  phi35_mini:
+    name: Phi-3.5-mini-instruct
+    official_repo: microsoft/Phi-3.5-mini-instruct
+    mlx_repo: mlx-community/Phi-3.5-mini-instruct-4bit
+    mlx_revision: 7b2052fd882fe017300d4d42a4eb06a27b816af4
+    architecture: Phi3ForCausalLM (model_type phi3)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: mit
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: false
+      disable: "n/a"
+    notes: "Older generation of phi4_mini."
+
+  llama32_3b:
+    name: Llama 3.2 3B Instruct
+    official_repo: meta-llama/Llama-3.2-3B-Instruct
+    mlx_repo: mlx-community/Llama-3.2-3B-Instruct-4bit
+    mlx_revision: 7f0dc925e0d0afb0322d96f9255cfddf2ba5636e
+    architecture: LlamaForCausalLM (model_type llama)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: llama3.2
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: false
+      disable: "n/a"
+    notes: "Llama 3.2 community licence. Template may insert the current date in the system block: check prompt determinism at smoke test."
+
+  llama32_1b:
+    name: Llama 3.2 1B Instruct
+    official_repo: meta-llama/Llama-3.2-1B-Instruct
+    mlx_repo: mlx-community/Llama-3.2-1B-Instruct-4bit
+    mlx_revision: 08231374eeacb049a0eade7922910865b8fce912
+    architecture: LlamaForCausalLM (model_type llama)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: llama3.2
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: false
+      disable: "n/a"
+    notes: "Same template as llama32_3b."
+
+  smollm3_3b:
+    name: SmolLM3-3B
+    official_repo: HuggingFaceTB/SmolLM3-3B
+    mlx_repo: mlx-community/SmolLM3-3B-4bit
+    mlx_revision: d3a7e0594d6642dbcfb7d149bed8b0bdf49f95ce
+    architecture: SmolLM3ForCausalLM (model_type smollm3)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: apache-2.0
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: true
+      default: "ON"
+      disable: "apply_chat_template(..., enable_thinking=False) -> template sets /no_think"
+    notes: "Template writes a metadata header into the system block: check prompt determinism at smoke test."
+
+  granite33_2b:
+    name: Granite 3.3 2B Instruct
+    official_repo: ibm-granite/granite-3.3-2b-instruct
+    mlx_repo: mlx-community/granite-3.3-2b-instruct-4bit
+    mlx_revision: 58246c5498495c14599525c852cfadb66c9f3084
+    architecture: GraniteForCausalLM (model_type granite)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: apache-2.0
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: true
+      default: "OFF"
+      disable: "only on when the template variable 'thinking' is set; we never set it"
+    notes: "Template adds a default system preamble (may include today's date): check at smoke test."
+
+  ministral3_3b:
+    name: Ministral 3 3B Instruct (2512)
+    official_repo: mistralai/Ministral-3-3B-Instruct-2512
+    mlx_repo: mlx-community/Ministral-3-3B-Instruct-2512-4bit
+    mlx_revision: a962dcb09eee4169c890e544c9eb938f1113fdee
+    architecture: Mistral3ForConditionalGeneration (model_type mistral3)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: apache-2.0
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: false
+      disable: "n/a"
+    notes: "Multimodal checkpoint (Mistral3ForConditionalGeneration); mlx-lm mistral3.py should load text-only: verify on first load."
+
+  lfm25_1p2b:
+    name: LFM2.5-1.2B Instruct
+    official_repo: LiquidAI/LFM2.5-1.2B-Instruct
+    mlx_repo: mlx-community/LFM2.5-1.2B-Instruct-4bit
+    mlx_revision: dee2f8a2786e6648bb644a7ca40652842490034b
+    architecture: Lfm2ForCausalLM (model_type lfm2)
+    backend: mlx-lm   # not yet loaded; verify on first load
+    licence: other
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: false
+      disable: "n/a"
+    notes: "LFM Open License (restrictive; research use)."
+
+  # ---- Added 2026-10-23: larger reference model for Paper 1 (not part of the 12-model benchmark list) ----
+  qwen35_9b_ref:
+    name: Qwen3.5-9B (instruct), reference
+    official_repo: Qwen/Qwen3.5-9B
+    mlx_repo: mlx-community/Qwen3.5-9B-MLX-4bit
+    mlx_revision: 938d8919941c6e7efd3c7150eff7fe9d12afa631
+    architecture: Qwen3_5ForConditionalGeneration (model_type qwen3_5); loaded text-only like qwen35_4b
+    backend: mlx-lm
+    licence: apache-2.0
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: true
+      default: "ON"
+      disable: "apply_chat_template(..., enable_thinking=False)"
+    notes: "Same family and chat template as qwen35_4b; about 6 GB of 4-bit weights."
+
+# ---------------------------------------------------------------------------
+# Reference model (NOT an expert candidate). Used only for the fine-tuning
+# decision rule in docs/PROJECT_PLAN.md. Runs on Colab via notebooks/reference_qwen35_27b.ipynb.
+reference_models:
+  qwen35_27b_ref:
+    name: Qwen3.5-27B (reference, not an expert candidate)
+    role: reference
+    backend: vllm
+    vllm_version: "0.30.0"   # registry includes Qwen3_5ForConditionalGeneration; language_model_only=True
+    repo_bf16: Qwen/Qwen3.5-27B
+    revision_bf16: fc05daec18b0a78c049392ed2e771dde82bdf654
+    repo_fp8: Qwen/Qwen3.5-27B-FP8          # official FP8; used when GPU < 80 GB (needs >= 40 GB)
+    revision_fp8: 97f5941bf617e31c5e237364a8602ce3f03a551a
+    # No official AWQ checkpoint exists (Qwen also publishes GPTQ-Int4; not used).
+    # Precision actually used is recorded per run in results/zeroshot/qwen35_27b_ref/run_meta.json.
+    gated: false
+    system_role: true
+    thinking:
+      has_mode: true
+      default: "ON"
+      disable: "apply_chat_template(..., enable_thinking=False)"
+    decoding: greedy (temperature 0), seed 0, batched (latency not comparable to SLMs)

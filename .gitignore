@@ -1,0 +1,25 @@
+# data & large artefacts (released on Zenodo, never committed)
+data/*
+!data/.gitkeep
+*.jsonl
+*.jsonl.gz
+*.npy
+*.tar
+*.tar.gz
+reports/
+results/
+release/data/
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+# os
+.DS_Store
+._*

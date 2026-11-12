@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use JU-M3C, please cite the paper below."
+title: "JU-M3C: A Large-Scale, Leakage-Audited Multimodal Multi-Layer Network Corpus of Medical Cases Benchmarked with Small Vision-Language Models"
+authors:
+  - family-names: Sur
+    given-names: Sayanjib
+  - family-names: Singh
+    given-names: Pawan Kumar
+year: 2026
+repository-code: "https://github.com/Codewithsayanjib/JU-M3C"
+license: MIT
+preferred-citation:
+  type: article
+  title: "JU-M3C: A Large-Scale, Leakage-Audited Multimodal Multi-Layer Network Corpus of Medical Cases Benchmarked with Small Vision-Language Models"
+  authors:
+    - family-names: Sur
+      given-names: Sayanjib
+    - family-names: Singh
+      given-names: Pawan Kumar
+  year: 2026
