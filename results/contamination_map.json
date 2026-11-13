@@ -1,0 +1,141 @@
+{
+ "aci_bench": {
+  "n_test": 120,
+  "any_benchmark": {
+   "n": 0,
+   "pct": 0.0
+  },
+  "by_training_source": {}
+ },
+ "cupcase": {
+  "n_test": 3562,
+  "any_benchmark": {
+   "n": 1906,
+   "pct": 53.5
+  },
+  "by_training_source": {
+   "multicare": {
+    "n": 49,
+    "pct": 1.4,
+    "text_layer": 49,
+    "article_layer_only": 0
+   },
+   "multiclinsum": {
+    "n": 1210,
+    "pct": 34.0,
+    "text_layer": 1210,
+    "article_layer_only": 0
+   },
+   "pmc_patients": {
+    "n": 1489,
+    "pct": 41.8,
+    "text_layer": 1489,
+    "article_layer_only": 0
+   }
+  }
+ },
+ "medcasereasoning": {
+  "n_test": 897,
+  "any_benchmark": {
+   "n": 580,
+   "pct": 64.7
+  },
+  "by_training_source": {
+   "multicare": {
+    "n": 179,
+    "pct": 20.0,
+    "text_layer": 0,
+    "article_layer_only": 179
+   },
+   "pmc_patients": {
+    "n": 556,
+    "pct": 62.0,
+    "text_layer": 0,
+    "article_layer_only": 556
+   }
+  }
+ },
+ "mts_dialog": {
+  "n_test": 400,
+  "any_benchmark": {
+   "n": 51,
+   "pct": 12.8
+  },
+  "by_training_source": {
+   "mtsamples": {
+    "n": 51,
+    "pct": 12.8,
+    "text_layer": 51,
+    "article_layer_only": 0
+   }
+  }
+ },
+ "mtsamples": {
+  "n_test": 464,
+  "any_benchmark": {
+   "n": 35,
+   "pct": 7.5
+  },
+  "by_training_source": {
+   "mts_dialog": {
+    "n": 32,
+    "pct": 6.9,
+    "text_layer": 32,
+    "article_layer_only": 0
+   },
+   "mtsamples": {
+    "n": 3,
+    "pct": 0.6,
+    "text_layer": 3,
+    "article_layer_only": 0
+   }
+  }
+ },
+ "multiclinsum": {
+  "n_test": 3396,
+  "any_benchmark": {
+   "n": 2315,
+   "pct": 68.2
+  },
+  "by_training_source": {
+   "multicare": {
+    "n": 608,
+    "pct": 17.9,
+    "text_layer": 608,
+    "article_layer_only": 0
+   },
+   "pmc_patients": {
+    "n": 1869,
+    "pct": 55.0,
+    "text_layer": 1869,
+    "article_layer_only": 0
+   }
+  }
+ },
+ "_multi_hop": {
+  "aci_bench": {
+   "direct": 0,
+   "chain_only": 0
+  },
+  "cupcase": {
+   "direct": 1906,
+   "chain_only": 17
+  },
+  "medcasereasoning": {
+   "direct": 580,
+   "chain_only": 0
+  },
+  "mts_dialog": {
+   "direct": 51,
+   "chain_only": 0
+  },
+  "mtsamples": {
+   "direct": 35,
+   "chain_only": 0
+  },
+  "multiclinsum": {
+   "direct": 2315,
+   "chain_only": 0
+  }
+ }
+}

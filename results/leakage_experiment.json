@@ -1,0 +1,26 @@
+{
+ "leaked_base_rougeL": 0.23898657172634677,
+ "leaked_base_exact": 0.0,
+ "leaked_clean_rougeL": 0.2327926490220415,
+ "leaked_clean_exact": 0.0,
+ "leaked_leaky_rougeL": 0.32554684966729436,
+ "leaked_leaky_exact": 0.02586206896551724,
+ "leaked_leaky_minus_clean": 0.09275420064525282,
+ "leaked_ci": [
+  0.06590619053232188,
+  0.12072637385870984
+ ],
+ "leaked_n": 232,
+ "not_leaked_base_rougeL": 0.27499130926068693,
+ "not_leaked_base_exact": 0.0,
+ "not_leaked_clean_rougeL": 0.2824337160532305,
+ "not_leaked_clean_exact": 0.0,
+ "not_leaked_leaky_rougeL": 0.2849686881820552,
+ "not_leaked_leaky_exact": 0.0,
+ "not_leaked_leaky_minus_clean": 0.0025349721288246796,
+ "not_leaked_ci": [
+  -0.008262891749426146,
+  0.013053931785845716
+ ],
+ "not_leaked_n": 768
+}

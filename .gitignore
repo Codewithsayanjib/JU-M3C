@@ -7,7 +7,6 @@ data/*
 *.tar
 *.tar.gz
 reports/
-results/
 release/data/
 # python
 __pycache__/

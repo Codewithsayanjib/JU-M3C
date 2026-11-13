@@ -1,0 +1,29 @@
+task,method,score,diff_vs_best,ci_lo,ci_hi,note
+diagnosis_mcq,best single (qwen35_4b),0.888,,,,
+diagnosis_mcq,"vote, all 12",0.9,0.01200000000000001,-0.008000000000000007,0.03200000000000003,
+diagnosis_mcq,"vote, top 5 (dev)",0.909,0.02100000000000002,0.0050000000000000044,0.03600000000000003,
+diagnosis_mcq,"vote, top 3 (dev)",0.898,0.010000000000000009,-0.0040000000000000036,0.026000000000000023,
+diagnosis_mcq,"oracle, top 3 (dev)",0.965,,,,
+diagnosis_mcq,"oracle, all 12",0.997,,,,
+diagnosis_mcq,members top 3 (dev),,,,,"qwen35_4b, ministral3_3b, llama32_3b"
+notes_specialty,best single (qwen35_4b),0.8039268536028681,,,,
+notes_specialty,"vote, all 12",0.8170084375998856,0.013081583997017532,-0.021965320008436998,0.04962178031569027,
+notes_specialty,"vote, top 5 (dev)",0.8203837531951246,0.01645689959225649,-0.021064656529987364,0.0654680326119909,
+notes_specialty,"vote, top 3 (dev)",0.8172180710029202,0.013291217400052124,-0.0191922518584857,0.05983721099810253,
+notes_specialty,"oracle, top 3 (dev)",0.9484240687679083,,,,
+notes_specialty,"oracle, all 12",0.9799426934097422,,,,
+notes_specialty,members top 3 (dev),,,,,"qwen35_4b, gemma4_e4b, ministral3_3b"
+notes_doctype,best single (gemma4_e4b),0.7713385477037646,,,,
+notes_doctype,"vote, all 12",0.6738844474704756,-0.09745410023328904,-0.14509519982115776,-0.04779187340173547,
+notes_doctype,"vote, top 5 (dev)",0.7358682717268037,-0.03547027597696095,-0.06891547401946027,-0.0026448394238726383,
+notes_doctype,"vote, top 3 (dev)",0.742076265425434,-0.02926228227833061,-0.05886347624038008,-0.0006753399315451689,
+notes_doctype,"oracle, top 3 (dev)",0.9375,,,,
+notes_doctype,"oracle, all 12",0.9799107142857143,,,,
+notes_doctype,members top 3 (dev),,,,,"gemma4_e4b, gemma4_e2b, qwen35_4b"
+notes_section,best single (gemma4_e4b),0.5191234838960861,,,,
+notes_section,"vote, all 12",0.4739305614568773,-0.045192922439208805,-0.1120858863229075,0.012488147847230057,
+notes_section,"vote, top 5 (dev)",0.4721325391524312,-0.046990944743654894,-0.08739999326392658,-0.0024875544321517427,
+notes_section,"vote, top 3 (dev)",0.5150813255301414,-0.004042158365944681,-0.03720924825012956,0.03204506497201808,
+notes_section,"oracle, top 3 (dev)",0.7906458797327395,,,,
+notes_section,"oracle, all 12",0.9042316258351893,,,,
+notes_section,members top 3 (dev),,,,,"gemma4_e4b, qwen35_4b, ministral3_3b"
